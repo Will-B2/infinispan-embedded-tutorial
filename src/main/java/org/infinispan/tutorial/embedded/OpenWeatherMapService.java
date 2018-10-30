@@ -53,14 +53,21 @@ public class OpenWeatherMapService extends CachingWeatherService {
    protected LocationWeather fetchWeather(String location) {
 
       Document dom = fetchData(location);
-      Element current = (Element) dom.getElementsByTagName("current").item(0);
-      Element temperature = (Element) current.getElementsByTagName("temperature").item(0);
-      Element weather = (Element) current.getElementsByTagName("weather").item(0);
-      String[] split = location.split(",");
-      return new LocationWeather(
-            Float.parseFloat(temperature.getAttribute("value")),
-            weather.getAttribute("value"),
-            split[1].trim());
+
+      if (dom != null) {
+
+         Element current = (Element) dom.getElementsByTagName("current").item(0);
+         Element temperature = (Element) current.getElementsByTagName("temperature").item(0);
+         Element weather = (Element) current.getElementsByTagName("weather").item(0);
+         String[] split = location.split(",");
+
+         return new LocationWeather(
+             Float.parseFloat(temperature.getAttribute("value")),
+             weather.getAttribute("value"),
+             split[1].trim());
+      }
+
+      return new LocationWeather((float) 1.0, "", "");
    }
 
 }
